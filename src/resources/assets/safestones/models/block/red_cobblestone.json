@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "safestones:blocks/red_cobblestone"
+    }
+}
