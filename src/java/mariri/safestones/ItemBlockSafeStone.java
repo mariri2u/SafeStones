@@ -1,8 +1,12 @@
 package mariri.safestones;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 public class ItemBlockSafeStone extends ItemBlock {
 	
@@ -27,4 +31,9 @@ public class ItemBlockSafeStone extends ItemBlock {
         	return this.getUnlocalizedName();
         }
     }
+    
+	@Override
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List tooltip, boolean par4) {
+		tooltip.add(StatCollector.translateToLocal("safestones.tooltip"));
+	}
 }

@@ -20,3 +20,4 @@ tile.safeColorStone.12.name=安心と信頼の白い丸石
 tile.safeColorStone.13.name=安心と信頼の白い石
 tile.safeColorStone.14.name=安心と信頼の白い石レンガ
 tile.safeColorStone.15.name=安心と信頼の磨かれた白い石
+safestones.tooltip=このブロックの上にはモンスターが沸きません

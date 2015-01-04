@@ -2,35 +2,29 @@ package mariri.safestones;
 
 
 import java.util.List;
-import java.util.Random;
 
-import net.minecraft.block.BlockStone;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSafeVanillaStone extends BlockStone implements IBlockSafeStone{
+public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafeStone{
 	
 	@SideOnly(Side.CLIENT)
 	protected IIcon[] icons;
 
 	protected String unlocalizedName;
 
-	
-//	protected float[] hardnessTable = new float[]{
-//			2.0F, 1.5F, 1.5F, 2.0F
-//	};
-	
 	protected BlockSafeVanillaStone(){
 		super();
 		setCreativeTab(CreativeTabs.tabBlock);
@@ -44,22 +38,22 @@ public class BlockSafeVanillaStone extends BlockStone implements IBlockSafeStone
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, unlocalizedName);
    
         registerRecipe();
+        registerOreDictionary();
 	}
     
 	private void registerRecipe(){
-		
 		// cobblestone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 0),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
-        		'Y', new ItemStack(Items.gold_nugget)
+        		'Y', "nuggetGold"
         	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 1),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
-        		'Y', new ItemStack(Items.gold_nugget)
+        		'Y', "nuggetGold"
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 0), new ItemStack(this, 1, 1), 0);
@@ -68,7 +62,7 @@ public class BlockSafeVanillaStone extends BlockStone implements IBlockSafeStone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 2),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
-        		'Y', new ItemStack(Items.gold_nugget)
+        		'Y', "nuggetGold"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 1, 2),
@@ -77,24 +71,25 @@ public class BlockSafeVanillaStone extends BlockStone implements IBlockSafeStone
         	});
 
         // brick
-        GameRegistry.addRecipe( new ItemStack(this, 1, 3),
-        	new Object[] { "XXX", "XYX", "XXX",
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 3),
+        		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.brick_block),
-        		'Y', new ItemStack(Items.gold_nugget)
-        	});
+        		'Y', "nuggetGold"
+        	));
         
         // nether brick
-        GameRegistry.addRecipe( new ItemStack(this, 1, 4),
-            new Object[] { "XXX", "XYX", "XXX",
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 4),
+        		"XXX", "XYX", "XXX",
             	'X', new ItemStack(Blocks.nether_brick),
-            	'Y', new ItemStack(Items.gold_nugget)
-            });
+            	'Y', "nuggetGold"
+            ));
     }
 	
-	@Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_){
-        return Item.getItemFromBlock(this);
-    }
+	private void registerOreDictionary(){
+        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
+        OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
+        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
+	}
 	
     @Override
     public int damageDropped(int meta){
@@ -104,16 +99,6 @@ public class BlockSafeVanillaStone extends BlockStone implements IBlockSafeStone
     		return meta;
     	}
     }
-    
-//    @Override
-//    public float getBlockHardness(World world, int x, int y, int z){
-//    	int meta = world.getBlockMetadata(x, y, z);
-//    	float hardness = hardnessTable[0];
-//    	if(meta < hardnessTable.length){
-//    		hardness = hardnessTable[meta];
-//    	}
-//    	return hardness;
-//    }
     
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister){

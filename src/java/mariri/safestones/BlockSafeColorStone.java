@@ -2,9 +2,8 @@ package mariri.safestones;
 
 
 import java.util.List;
-import java.util.Random;
 
-import net.minecraft.block.BlockStone;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
@@ -19,17 +18,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
+public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeStone{
 	
 	@SideOnly(Side.CLIENT)
 	protected IIcon[] icons;
 
 	protected String unlocalizedName;
-
-	
-//	protected float[] hardnessTable = new float[]{
-//			2.0F, 1.5F, 1.5F, 2.0F
-//	};
 	
 	protected BlockSafeColorStone(){
 		super();
@@ -53,14 +47,14 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
-        		'Y', new ItemStack(Items.coal)
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
-        		'Y', new ItemStack(Items.coal)
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 0), new ItemStack(this, 1, 1), 0);
@@ -69,7 +63,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
-        		'Y', new ItemStack(Items.coal)
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 2),
@@ -81,7 +75,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 3),
         		"XXX", "XYX", "XXX",
         		'X', "smoothstone",
-        		'Y', new ItemStack(Items.coal)
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
 
         
@@ -95,14 +89,14 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 4),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
-        		'Y', new ItemStack(Items.redstone)
+        		'Y', "dustRedstone"
         	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 5),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
-        		'Y', new ItemStack(Items.redstone)
+        		'Y', "dustRedstone"
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 4), new ItemStack(this, 1, 5), 0);
@@ -111,7 +105,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 6),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
-        		'Y', new ItemStack(Items.redstone)
+        		'Y', "dustRedstone"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 6),
@@ -123,7 +117,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 7),
         		"XXX", "XYX", "XXX",
         		'X', "smoothstone",
-        		'Y', new ItemStack(Items.redstone)
+        		'Y', "dustRedstone"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 7),
@@ -136,14 +130,14 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 8),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
-        		'Y', new ItemStack(Items.dye, 1, 4)
+        		'Y', "gemLapis"
         	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 9),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
-        		'Y', new ItemStack(Items.dye, 1, 4)
+        		'Y', "gemLapis"
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 8), new ItemStack(this, 1, 9), 0);
@@ -152,7 +146,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 10),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
-        		'Y', new ItemStack(Items.dye, 1, 4)
+        		'Y', "gemLapis"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 10),
@@ -164,7 +158,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 11),
         		"XXX", "XYX", "XXX",
         		'X', "smoothstone",
-        		'Y', new ItemStack(Items.dye, 1, 4)
+        		'Y', "gemLapis"
         	));
         
         GameRegistry.addRecipe( new ItemStack(this, 4, 11),
@@ -177,14 +171,14 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 12),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
-        		'Y', new ItemStack(Items.dye, 1, 15)
+        		'Y', "gemQuartz"
         	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 13),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
-        		'Y', new ItemStack(Items.dye, 1, 15)
+        		'Y', "gemQuartz"
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 12), new ItemStack(this, 1, 13), 0);
@@ -193,7 +187,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 14),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
-        		'Y', new ItemStack(Items.dye, 1, 15)
+        		'Y', "gemQuartz"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 14),
@@ -205,7 +199,7 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 15),
         		"XXX", "XYX", "XXX",
         		'X', "smoothstone",
-        		'Y', new ItemStack(Items.dye, 1, 15)
+        		'Y', "gemQuartz"
         	));
 
         GameRegistry.addRecipe( new ItemStack(this, 4, 15),
@@ -233,11 +227,6 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
         OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 15));
 	}
 	
-	@Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_){
-        return Item.getItemFromBlock(this);
-    }
-	
     @Override
     public int damageDropped(int meta){
     	if(meta % 4 == 1){
@@ -246,16 +235,6 @@ public class BlockSafeColorStone extends BlockStone implements IBlockSafeStone{
     		return meta;
     	}
     }
-    
-//    @Override
-//    public float getBlockHardness(World world, int x, int y, int z){
-//    	int meta = world.getBlockMetadata(x, y, z);
-//    	float hardness = hardnessTable[0];
-//    	if(meta < hardnessTable.length){
-//    		hardness = hardnessTable[meta];
-//    	}
-//    	return hardness;
-//    }
     
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister){

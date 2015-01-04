@@ -20,3 +20,4 @@ tile.safeColorStone.12.name=Safe White Cobblestone
 tile.safeColorStone.13.name=Safe White Stone
 tile.safeColorStone.14.name=Safe White Stone Bricks
 tile.safeColorStone.15.name=Safe White Polished Stone
+safestones.tooltip=Mobs can't spawn on this block
