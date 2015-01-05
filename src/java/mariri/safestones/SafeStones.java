@@ -12,14 +12,13 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 public class SafeStones
 {
     public static final String MODID = "SafeStones";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.0a";
     
     public static BlockSafeVanillaStone blockSafeStone;
     public static BlockSafeColorStone blockSafeColorStone;
     
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event){
         blockSafeStone = new BlockSafeVanillaStone();
         blockSafeColorStone = new BlockSafeColorStone();
         
