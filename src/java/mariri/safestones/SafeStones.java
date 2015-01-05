@@ -14,7 +14,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 public class SafeStones
 {
     public static final String MODID = "SafeStones";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.0a";
     
     public static int BLOCK_SAFE_VANILLA_STONE_ID;
     public static int BLOCK_SAFE_COLOR_STONE_ID;

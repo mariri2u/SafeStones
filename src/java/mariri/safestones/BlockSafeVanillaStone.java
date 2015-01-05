@@ -45,14 +45,14 @@ public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafe
 	private void registerRecipe(){
 		
 		// cobblestone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 0),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
         		'Y', new ItemStack(Item.goldNugget)
         	));
 
         // stone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 1),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
         		'Y', new ItemStack(Item.goldNugget)
@@ -61,26 +61,26 @@ public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafe
         FurnaceRecipes.smelting().addSmelting(this.blockID, 0, new ItemStack(this, 1, 1), 0);
         
         // stonebrick
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 2),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
         		"XXX", "XYX", "XXX",
         		'X', "stonebrick",
         		'Y', new ItemStack(Item.goldNugget)
         	));
 
-        GameRegistry.addRecipe( new ItemStack(this, 1, 2),
+        GameRegistry.addRecipe( new ItemStack(this, 4, 2),
         	new Object[] { "XX", "XX",
         		'X', new ItemStack(this, 1, 1)
         	});
 
         // brick
-        GameRegistry.addRecipe( new ItemStack(this, 1, 3),
+        GameRegistry.addRecipe( new ItemStack(this, 8, 3),
         	new Object[] { "XXX", "XYX", "XXX",
         		'X', new ItemStack(Block.brick),
         		'Y', new ItemStack(Item.goldNugget)
         	});
         
         // nether brick
-        GameRegistry.addRecipe( new ItemStack(this, 1, 4),
+        GameRegistry.addRecipe( new ItemStack(this, 8, 4),
             new Object[] { "XXX", "XYX", "XXX",
             	'X', new ItemStack(Block.netherBrick),
             	'Y', new ItemStack(Item.goldNugget)
