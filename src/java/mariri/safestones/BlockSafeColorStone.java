@@ -24,8 +24,9 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
 	protected IIcon[] icons;
 
 	protected String unlocalizedName;
+	protected boolean invertSpawnRule;
 	
-	protected BlockSafeColorStone(){
+	protected BlockSafeColorStone(boolean invertSpawnRule){
 		super();
 		setCreativeTab(CreativeTabs.tabBlock);
 		this.setStepSound(soundTypePiston);
@@ -33,6 +34,7 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
 		this.setResistance(2000.0F);
     	this.icons = new IIcon[16];
     	this.unlocalizedName = "safeColorStone";
+    	this.invertSpawnRule = invertSpawnRule;
 
 		setBlockName(unlocalizedName);
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, unlocalizedName);
@@ -41,6 +43,10 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
         registerOreDictionary();
     }
     
+	public boolean isInvert(){
+		return invertSpawnRule;
+	}
+	
 	private void registerRecipe(){
 		// black
 		// cobblestone
@@ -262,7 +268,11 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
     
 	@Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z){
-    	return false;
+		if(invertSpawnRule){
+			return super.canCreatureSpawn(type, world, x, y, z);
+		}else{
+			return false;
+		}
     }
     
     @SideOnly(Side.CLIENT)

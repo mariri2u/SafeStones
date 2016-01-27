@@ -24,8 +24,9 @@ public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafe
 	protected IIcon[] icons;
 
 	protected String unlocalizedName;
+	protected boolean invertSpawnRule;
 
-	protected BlockSafeVanillaStone(){
+	protected BlockSafeVanillaStone(boolean invertSpawnRule){
 		super();
 		setCreativeTab(CreativeTabs.tabBlock);
 		this.setStepSound(soundTypePiston);
@@ -33,12 +34,17 @@ public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafe
 		this.setResistance(2000.0F);
     	this.icons = new IIcon[5];
     	this.unlocalizedName = "safeVanillaStone";
+    	this.invertSpawnRule = invertSpawnRule;
 
 		setBlockName(unlocalizedName);
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, unlocalizedName);
    
         registerRecipe();
         registerOreDictionary();
+	}
+	
+	public boolean isInvert(){
+		return invertSpawnRule;
 	}
     
 	private void registerRecipe(){
@@ -115,7 +121,11 @@ public class BlockSafeVanillaStone extends BlockStoneBrick implements IBlockSafe
     
 	@Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z){
-    	return false;
+		if(invertSpawnRule){
+			return super.canCreatureSpawn(type, world, x, y, z);
+		}else{
+			return false;
+		}
     }
     
     @SideOnly(Side.CLIENT)

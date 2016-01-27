@@ -34,6 +34,11 @@ public class ItemBlockSafeStone extends ItemBlock {
     
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List tooltip, boolean par4) {
-		tooltip.add(StatCollector.translateToLocal("safestones.tooltip"));
+		Block block = this.field_150939_a;
+        if (block != null && block instanceof IBlockSafeStone && ((IBlockSafeStone) block).isInvert()){
+        	tooltip.add(StatCollector.translateToLocal("safestones.tooltip_invert"));
+        }else{
+        	tooltip.add(StatCollector.translateToLocal("safestones.tooltip"));
+        }
 	}
 }
