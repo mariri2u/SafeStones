@@ -17,14 +17,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class BlockSafeVanillaStone extends Block{
+public class BlockSafeVanillaStone extends Block implements IBlockSafeStone {
 	
 	public static int SUB_BLOCK_VALUES = 15;
 
@@ -42,13 +44,13 @@ public class BlockSafeVanillaStone extends Block{
     	this.name = "safeVanillaStone";
     	this.setDefaultState(this.blockState.getBaseState().withProperty(METADATA, 0));
     	this.setUnlocalizedName(name);
-    	
+
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, name);
    
         registerOreDictionary();
         registerRecipe();
 	}
-	
+
     @Override
     public int damageDropped(IBlockState state){
     	int meta = state.getBlock().getMetaFromState(state);
@@ -79,25 +81,25 @@ public class BlockSafeVanillaStone extends Block{
     
     @SideOnly(Side.CLIENT)
     public void registerTextures(){
-    	String[] jsons = new String[SUB_BLOCK_VALUES];
-    	jsons[0] = "cobblestone";
-    	jsons[1] = "stone";
-    	jsons[2] = "stonebrick";
-    	jsons[3] = "brick_block";
-    	jsons[4] = "nether_brick";
-    	jsons[5] = "sandstone";
-    	jsons[6] = "smooth_sandstone";
-    	jsons[7] = "red_sandstone";
-    	jsons[8] = "smooth_red_sandstone";
-    	jsons[9] = "granite";
-    	jsons[10] = "granite_smooth";
-    	jsons[11] = "diorite";
-    	jsons[12] = "diorite_smooth";
-    	jsons[13] = "andesite";
-    	jsons[14] = "andesite_smooth";
+    	ResourceLocation[] jsons = new ResourceLocation[SUB_BLOCK_VALUES];
+    	jsons[0] = new ResourceLocation("cobblestone");
+    	jsons[1] = new ResourceLocation("stone");
+    	jsons[2] = new ResourceLocation("stonebrick");
+    	jsons[3] = new ResourceLocation("brick_block");
+    	jsons[4] = new ResourceLocation("nether_brick");
+    	jsons[5] = new ResourceLocation("sandstone");
+    	jsons[6] = new ResourceLocation("smooth_sandstone");
+    	jsons[7] = new ResourceLocation("red_sandstone");
+    	jsons[8] = new ResourceLocation("smooth_red_sandstone");
+    	jsons[9] = new ResourceLocation("granite");
+    	jsons[10] = new ResourceLocation("granite_smooth");
+    	jsons[11] = new ResourceLocation("diorite");
+    	jsons[12] = new ResourceLocation("diorite_smooth");
+    	jsons[13] = new ResourceLocation("andesite");
+    	jsons[14] = new ResourceLocation("andesite_smooth");
         //モデルJSONファイルのファイル名を登録。1IDで1つだけなら、登録名はGameRegistryでの登録名と同じものにする。
         //ItemStackのmetadataで種類を分けて描画させたい場合。登録名を予め登録する。
-        ModelBakery.addVariantName(Item.getItemFromBlock(this), jsons);
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(this), jsons);
         //1IDで複数モデルを登録するなら、上のメソッドで登録した登録名を指定する。
         for(int i = 0; i < jsons.length; i++){
             Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(this), i, new ModelResourceLocation(jsons[i], "inventory"));        	
@@ -106,8 +108,12 @@ public class BlockSafeVanillaStone extends Block{
     
 	@Override
     public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type){
-    	return false;
-    }
+		if(ModRegistry.INVERT_SPAWN_RULE){
+			return super.canCreatureSpawn(world, pos, type);
+		}else{
+			return false;
+		}
+	}
 
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list){
@@ -117,152 +123,183 @@ public class BlockSafeVanillaStone extends Block{
     }
 
 	private void registerOreDictionary(){
-        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
-        OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
-        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
+        OreDictionary.registerOre("safeCobblestone", new ItemStack(this, 1, 0));
+        OreDictionary.registerOre("safeStone", new ItemStack(this, 1, 1));
+        OreDictionary.registerOre("safeStonebrick", new ItemStack(this, 1, 2));
+
+//        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
+//        OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
+//        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
 	}
 
 	private void registerRecipe(){
 		// cobblestone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 0),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
         		"XXX", "XYX", "XXX",
         		'X', "cobblestone",
         		'Y', "nuggetGold"
         	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeCobblestone",
+        		'Y', "nuggetGold"
+        	));
 
         // stone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 1),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
+        		'Y', "nuggetGold"
+        	));
+
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStone",
         		'Y', "nuggetGold"
         	));
         
         GameRegistry.addSmelting(new ItemStack(this, 1, 0), new ItemStack(this, 1, 1), 0);
         
         // stonebrick
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 2),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
         		"XXX", "XYX", "XXX",
-        		'X', "stonebrick",
+        		'X', new ItemStack(Blocks.stonebrick),
         		'Y', "nuggetGold"
         	));
 
-        GameRegistry.addRecipe( new ItemStack(this, 1, 2),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStonebrick",
+        		'Y', "nuggetGold"
+        	));
+        
+        GameRegistry.addRecipe( new ItemStack(this, 4, 2),
         	new Object[] { "XX", "XX",
         		'X', new ItemStack(this, 1, 1)
         	});
 
         // brick
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 3),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 3),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.brick_block),
         		'Y', "nuggetGold"
         	));
         
         // nether brick
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 4),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 4),
         		"XXX", "XYX", "XXX",
             	'X', new ItemStack(Blocks.nether_brick),
             	'Y', "nuggetGold"
             ));
         
 		// sandstone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 5),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 5),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.sandstone),
         		'Y', "nuggetGold"
         	));
         
 		// smooth sandstone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 6),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 6),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.sandstone, 1, 2),
         		'Y', "nuggetGold"
         	));
         
+        GameRegistry.addRecipe( new ItemStack(this, 4, 6),
+            	new Object[] { "XX", "XX",
+            		'X', new ItemStack(this, 1, 5)
+            	});
+        
 		// red sandstone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 7),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 7),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.red_sandstone),
         		'Y', "nuggetGold"
         	));
         
-		// smooth sandstone
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 8),
+		// smooth red sandstone
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 8),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.red_sandstone, 1, 2),
         		'Y', "nuggetGold"
         	));
         
+        GameRegistry.addRecipe( new ItemStack(this, 4, 8),
+            	new Object[] { "XX", "XX",
+            		'X', new ItemStack(this, 1, 7)
+            	});
+        
 		// granite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 9),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 9),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.stone, 1, 1),
         		'Y', "nuggetGold"
         	));
         
-        GameRegistry.addRecipe( new ItemStack(this, 1, 9),
-            	new Object[] { "XX", "XX",
-            		'X', new ItemStack(this, 1, 9)
-            	});
-        
-		// polished granite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 10),
-        		"XY",
-        		'X', new ItemStack(Blocks.stone, 1, 0),
-        		'Y', new ItemStack(Blocks.stone, 1, 11)
+        GameRegistry.addRecipe( new ShapelessOreRecipe( new ItemStack(this, 1, 9),
+        		new ItemStack(this, 1, 11),
+        		"gemQuartz"
         	));
         
-        GameRegistry.addRecipe( new ItemStack(this, 1, 10),
+		// polished granite
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 10),
+        		"XXX", "XYX", "XXX",
+        		'X', new ItemStack(Blocks.stone, 1, 2),
+        		'Y', "nuggetGold"
+        	));
+        
+        GameRegistry.addRecipe( new ItemStack(this, 4, 10),
             	new Object[] { "XX", "XX",
             		'X', new ItemStack(this, 1, 9)
             	});
         
 		// diorite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 11),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 11),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.stone, 1, 3),
         		'Y', "nuggetGold"
         	));
         
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 11),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 2, 11),
         		"YX", "XY", 
-        		'X', new ItemStack(this, 1, 0),
+        		'X', "safeCobblestone",
         		'Y', "gemQuartz"
         	));
         
 		// polished diorite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 12),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 12),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.stone, 1, 4),
         		'Y', "nuggetGold"
         	));
         
-        GameRegistry.addRecipe( new ItemStack(this, 1, 12),
+        GameRegistry.addRecipe( new ItemStack(this, 4, 12),
             	new Object[] { "XX", "XX",
             		'X', new ItemStack(this, 1, 11)
             	});
         
 		// andesite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 13),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 13),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.stone, 1, 5),
         		'Y', "nuggetGold"
         	));
         
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 13),
-        		"XY", 
-        		'X', new ItemStack(this, 1, 11),
-        		'Y', "gemQuartz"
+        GameRegistry.addRecipe( new ShapelessOreRecipe( new ItemStack(this, 2, 13),
+        		"safeStone",
+        		"safeCobblestone"
         	));
         
 		// polished andesite
-        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 1, 14),
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 14),
         		"XXX", "XYX", "XXX",
         		'X', new ItemStack(Blocks.stone, 1, 6),
         		'Y', "nuggetGold"
         	));
         
-        GameRegistry.addRecipe( new ItemStack(this, 1, 14),
+        GameRegistry.addRecipe( new ItemStack(this, 4, 14),
             	new Object[] { "XX", "XX",
             		'X', new ItemStack(this, 1, 13)
             	});

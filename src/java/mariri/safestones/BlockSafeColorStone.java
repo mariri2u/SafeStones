@@ -13,10 +13,12 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockSafeColorStone extends Block{
+public class BlockSafeColorStone extends Block implements IBlockSafeStone {
 	
 	public static final int SUB_BLOCK_VALUES = 16;
 	
@@ -32,7 +34,7 @@ public class BlockSafeColorStone extends Block{
     public static final PropertyInteger METADATA = PropertyInteger.create("meta", 0, SUB_BLOCK_VALUES - 1);
 
 	protected String name;
-	
+
 	protected BlockSafeColorStone(){
 		super(Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
@@ -42,7 +44,7 @@ public class BlockSafeColorStone extends Block{
     	this.name = "safeColorStone";
     	this.setDefaultState(this.blockState.getBaseState().withProperty(METADATA, 0));
     	this.setUnlocalizedName(name);
-    	
+
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, name);
    
         registerOreDictionary();
@@ -79,26 +81,26 @@ public class BlockSafeColorStone extends Block{
     
     @SideOnly(Side.CLIENT)
     public void registerTextures(){
-    	String[] jsons = new String[SUB_BLOCK_VALUES];
-    	jsons[0] = "safestones:black_cobblestone";
-    	jsons[1] = "safestones:black_stone";
-    	jsons[2] = "safestones:black_stonebrick";
-    	jsons[3] = "safestones:black_smoothstone";
-    	jsons[4] = "safestones:red_cobblestone";
-    	jsons[5] = "safestones:red_stone";
-    	jsons[6] = "safestones:red_stonebrick";
-    	jsons[7] = "safestones:red_smoothstone";
-    	jsons[8] = "safestones:blue_cobblestone";
-    	jsons[9] = "safestones:blue_stone";
-    	jsons[10] = "safestones:blue_stonebrick";
-    	jsons[11] = "safestones:blue_smoothstone";
-    	jsons[12] = "safestones:white_cobblestone";
-    	jsons[13] = "safestones:white_stone";
-    	jsons[14] = "safestones:white_stonebrick";
-    	jsons[15] = "safestones:white_smoothstone";
+    	ResourceLocation[] jsons = new ResourceLocation[SUB_BLOCK_VALUES];
+    	jsons[0] = new ResourceLocation("safestones:black_cobblestone");
+    	jsons[1] = new ResourceLocation("safestones:black_stone");
+    	jsons[2] = new ResourceLocation("safestones:black_stonebrick");
+    	jsons[3] = new ResourceLocation("safestones:black_smoothstone");
+    	jsons[4] = new ResourceLocation("safestones:red_cobblestone");
+    	jsons[5] = new ResourceLocation("safestones:red_stone");
+    	jsons[6] = new ResourceLocation("safestones:red_stonebrick");
+    	jsons[7] = new ResourceLocation("safestones:red_smoothstone");
+    	jsons[8] = new ResourceLocation("safestones:blue_cobblestone");
+    	jsons[9] = new ResourceLocation("safestones:blue_stone");
+    	jsons[10] = new ResourceLocation("safestones:blue_stonebrick");
+    	jsons[11] = new ResourceLocation("safestones:blue_smoothstone");
+    	jsons[12] = new ResourceLocation("safestones:white_cobblestone");
+    	jsons[13] = new ResourceLocation("safestones:white_stone");
+    	jsons[14] = new ResourceLocation("safestones:white_stonebrick");
+    	jsons[15] = new ResourceLocation("safestones:white_smoothstone");
         //モデルJSONファイルのファイル名を登録。1IDで1つだけなら、登録名はGameRegistryでの登録名と同じものにする。
         //ItemStackのmetadataで種類を分けて描画させたい場合。登録名を予め登録する。
-        ModelBakery.addVariantName(Item.getItemFromBlock(this), jsons);
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(this), jsons);
         //1IDで複数モデルを登録するなら、上のメソッドで登録した登録名を指定する。
         for(int i = 0; i < jsons.length; i++){
             Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(this), i, new ModelResourceLocation(jsons[i], "inventory"));
@@ -107,8 +109,12 @@ public class BlockSafeColorStone extends Block{
     
 	@Override
     public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type){
-    	return false;
-    }
+		if(ModRegistry.INVERT_SPAWN_RULE){
+			return super.canCreatureSpawn(world, pos, type);
+		}else{
+			return false;
+		}
+	}
 
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list){
@@ -118,24 +124,41 @@ public class BlockSafeColorStone extends Block{
     }
     
 	private void registerOreDictionary(){
-        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
-        OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
-        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
-        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 3));
-        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 4));
-        OreDictionary.registerOre("stone", new ItemStack(this, 1, 5));
-        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 6));
-        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 7));
-        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 8));
-        OreDictionary.registerOre("stone", new ItemStack(this, 1, 9));
-        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 10));
-        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 11));
-        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 12));
-        OreDictionary.registerOre("stone", new ItemStack(this, 1, 13));
-        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 14));
-        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 15));
+        OreDictionary.registerOre("safeCobblestone", new ItemStack(this, 1, 0));
+        OreDictionary.registerOre("safeStone", new ItemStack(this, 1, 1));
+        OreDictionary.registerOre("safeStonebrick", new ItemStack(this, 1, 2));
+        OreDictionary.registerOre("safeSmoothstone", new ItemStack(this, 1, 3));
+        OreDictionary.registerOre("safeCobblestone", new ItemStack(this, 1, 4));
+        OreDictionary.registerOre("safeStone", new ItemStack(this, 1, 5));
+        OreDictionary.registerOre("safeStonebrick", new ItemStack(this, 1, 6));
+        OreDictionary.registerOre("safeSmoothstone", new ItemStack(this, 1, 7));
+        OreDictionary.registerOre("safeCobblestone", new ItemStack(this, 1, 8));
+        OreDictionary.registerOre("safeStone", new ItemStack(this, 1, 9));
+        OreDictionary.registerOre("safeStonebrick", new ItemStack(this, 1, 10));
+        OreDictionary.registerOre("safeSmoothstone", new ItemStack(this, 1, 11));
+        OreDictionary.registerOre("safeCobblestone", new ItemStack(this, 1, 12));
+        OreDictionary.registerOre("safeStone", new ItemStack(this, 1, 13));
+        OreDictionary.registerOre("safeStonebrick", new ItemStack(this, 1, 14));
+        OreDictionary.registerOre("safeSmoothstone", new ItemStack(this, 1, 15));
+		
+//        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
+//        OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
+//        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
+//        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 3));
+//        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 4));
+//        OreDictionary.registerOre("stone", new ItemStack(this, 1, 5));
+//        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 6));
+//        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 7));
+//        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 8));
+//        OreDictionary.registerOre("stone", new ItemStack(this, 1, 9));
+//        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 10));
+//        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 11));
+//        OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 12));
+//        OreDictionary.registerOre("stone", new ItemStack(this, 1, 13));
+//        OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 14));
+//        OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 15));
 	}
-    
+
 	private void registerRecipe(){
 		// black
 		// cobblestone
@@ -144,20 +167,38 @@ public class BlockSafeColorStone extends Block{
         		'X', "cobblestone",
         		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeCobblestone",
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
+        	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
         		"XXX", "XYX", "XXX",
-        		'X', "stone",
+        		'X', "safeStone",
         		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
         
+         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 1),
+        		"XXX", "XYX", "XXX",
+        		'X', "stone",
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
+        	));
+       
         GameRegistry.addSmelting(new ItemStack(this, 1, 0), new ItemStack(this, 1, 1), 0);
         
         // stonebrick
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
         		"XXX", "XYX", "XXX",
-        		'X', "stonebrick",
+        		'X', new ItemStack(Blocks.stonebrick),
+        		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
+        	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 2),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStonebrick",
         		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
 
@@ -169,10 +210,9 @@ public class BlockSafeColorStone extends Block{
         // smoothstone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 3),
         		"XXX", "XYX", "XXX",
-        		'X', "smoothstone",
+        		'X', "safeSmoothstone",
         		'Y', new ItemStack(Items.coal, 1, OreDictionary.WILDCARD_VALUE)
         	));
-
         
         GameRegistry.addRecipe( new ItemStack(this, 4, 3),
         	new Object[] { "XX", "XX",
@@ -186,6 +226,12 @@ public class BlockSafeColorStone extends Block{
         		'X', "cobblestone",
         		'Y', "dustRedstone"
         	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 4),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeCobblestone",
+        		'Y', "dustRedstone"
+        	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 5),
@@ -194,15 +240,27 @@ public class BlockSafeColorStone extends Block{
         		'Y', "dustRedstone"
         	));
         
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 5),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStone",
+        		'Y', "dustRedstone"
+        	));
+        
         GameRegistry.addSmelting(new ItemStack(this, 1, 4), new ItemStack(this, 1, 5), 0);
         
         // stonebrick
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 6),
         		"XXX", "XYX", "XXX",
-        		'X', "stonebrick",
+        		'X', new ItemStack(Blocks.stonebrick),
         		'Y', "dustRedstone"
         	));
-
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 6),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStonebrick",
+        		'Y', "dustRedstone"
+        	));
+        
         GameRegistry.addRecipe( new ItemStack(this, 4, 6),
         	new Object[] { "XX", "XX",
         		'X', new ItemStack(this, 1, 5)
@@ -211,7 +269,7 @@ public class BlockSafeColorStone extends Block{
         // smoothstone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 7),
         		"XXX", "XYX", "XXX",
-        		'X', "smoothstone",
+        		'X', "safeSmoothstone",
         		'Y', "dustRedstone"
         	));
 
@@ -227,6 +285,12 @@ public class BlockSafeColorStone extends Block{
         		'X', "cobblestone",
         		'Y', "gemLapis"
         	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 8),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeCobblestone",
+        		'Y', "gemLapis"
+        	));
 
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 9),
@@ -235,15 +299,27 @@ public class BlockSafeColorStone extends Block{
         		'Y', "gemLapis"
         	));
         
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 9),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStone",
+        		'Y', "gemLapis"
+        	));
+        
         GameRegistry.addSmelting(new ItemStack(this, 1, 8), new ItemStack(this, 1, 9), 0);
         
         // stonebrick
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 10),
         		"XXX", "XYX", "XXX",
-        		'X', "stonebrick",
+        		'X', new ItemStack(Blocks.stonebrick),
         		'Y', "gemLapis"
         	));
 
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 10),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStonebrick",
+        		'Y', "gemLapis"
+        	));
+        
         GameRegistry.addRecipe( new ItemStack(this, 4, 10),
         	new Object[] { "XX", "XX",
         		'X', new ItemStack(this, 1, 9)
@@ -252,7 +328,7 @@ public class BlockSafeColorStone extends Block{
         // smoothstone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 11),
         		"XXX", "XYX", "XXX",
-        		'X', "smoothstone",
+        		'X', "safeSmoothstone",
         		'Y', "gemLapis"
         	));
         
@@ -269,10 +345,22 @@ public class BlockSafeColorStone extends Block{
         		'Y', "gemQuartz"
         	));
 
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 12),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeCobblestone",
+        		'Y', "gemQuartz"
+        	));
+        
         // stone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 13),
         		"XXX", "XYX", "XXX",
         		'X', "stone",
+        		'Y', "gemQuartz"
+        	));
+
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 13),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStone",
         		'Y', "gemQuartz"
         	));
         
@@ -281,7 +369,13 @@ public class BlockSafeColorStone extends Block{
         // stonebrick
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 14),
         		"XXX", "XYX", "XXX",
-        		'X', "stonebrick",
+        		'X', new ItemStack(Blocks.stonebrick),
+        		'Y', "gemQuartz"
+        	));
+        
+        GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 14),
+        		"XXX", "XYX", "XXX",
+        		'X', "safeStonebrick",
         		'Y', "gemQuartz"
         	));
 
@@ -293,7 +387,7 @@ public class BlockSafeColorStone extends Block{
         // smoothstone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 15),
         		"XXX", "XYX", "XXX",
-        		'X', "smoothstone",
+        		'X', "safeSmoothstone",
         		'Y', "gemQuartz"
         	));
 
