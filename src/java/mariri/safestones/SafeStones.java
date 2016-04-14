@@ -15,20 +15,20 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 public class SafeStones
 {
     public static final String MODID = "SafeStones";
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.1a";
     
-    private static boolean INVERT_SPAWN_RULE;
 //    private static boolean INVERT_SPAWNER_RULE;
     
     public static BlockSafeVanillaStone blockSafeStone;
     public static BlockSafeColorStone blockSafeColorStone;
+    public static BlockEnderStone blockEnderStone;
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
         
-        INVERT_SPAWN_RULE = config.get(Configuration.CATEGORY_GENERAL, "invertSpawnRule", false).getBoolean(false);
+        ModRegistry.INVERT_SPAWN_RULE = config.get(Configuration.CATEGORY_GENERAL, "invertSpawnRule", false).getBoolean(false);
 //        INVERT_SPAWNER_RULE = config.get(Configuration.CATEGORY_GENERAL, "invertSpawnerRule", false).getBoolean(false);
        
         config.save();
@@ -36,12 +36,13 @@ public class SafeStones
     
     @EventHandler
     public void init(FMLInitializationEvent event){
-        blockSafeStone = new BlockSafeVanillaStone(INVERT_SPAWN_RULE);
-        blockSafeColorStone = new BlockSafeColorStone(INVERT_SPAWN_RULE);
+        blockSafeStone = new BlockSafeVanillaStone();
+        blockSafeColorStone = new BlockSafeColorStone();
+        blockEnderStone = new BlockEnderStone();
         
         OreDictionary.registerOre("stonebrick", new ItemStack(Blocks.stonebrick));
         
-        if(INVERT_SPAWN_RULE){
+        if(ModRegistry.INVERT_SPAWN_RULE){
         	MinecraftForge.EVENT_BUS.register(CheckSpawnEventHandler.INSTANCE);
         }
         

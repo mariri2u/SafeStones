@@ -1,53 +1,31 @@
 package mariri.safestones;
 
 
-import java.util.List;
-
-import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeStone{
+public class BlockSafeColorStone extends BlockSafeStoneBase {
 	
-	@SideOnly(Side.CLIENT)
-	protected IIcon[] icons;
-
-	protected String unlocalizedName;
-	protected boolean invertSpawnRule;
+	protected BlockSafeColorStone(){
+		super("safeColorStone", 16);
+    }
 	
-	protected BlockSafeColorStone(boolean invertSpawnRule){
-		super();
-		setCreativeTab(CreativeTabs.tabBlock);
-		this.setStepSound(soundTypePiston);
-		this.setHardness(2.0F);
-		this.setResistance(2000.0F);
-    	this.icons = new IIcon[16];
-    	this.unlocalizedName = "safeColorStone";
-    	this.invertSpawnRule = invertSpawnRule;
-
-		setBlockName(unlocalizedName);
-        GameRegistry.registerBlock(this, ItemBlockSafeStone.class, unlocalizedName);
-   
-        registerRecipe();
-        registerOreDictionary();
+    @Override
+    public int damageDropped(int meta){
+    	if(meta % 4 == 1){
+    		return meta - 1;
+    	}else{
+    		return meta;
+    	}
     }
     
-	public boolean isInvert(){
-		return invertSpawnRule;
-	}
-	
-	private void registerRecipe(){
+	protected void registerRecipe(){
 		// black
 		// cobblestone
         GameRegistry.addRecipe( new ShapedOreRecipe( new ItemStack(this, 8, 0),
@@ -214,7 +192,7 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
         	});
 	}
 	
-	private void registerOreDictionary(){
+	protected void registerOreDictionary(){
         OreDictionary.registerOre("cobblestone", new ItemStack(this, 1, 0));
         OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
         OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
@@ -232,15 +210,6 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
         OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 14));
         OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 15));
 	}
-	
-    @Override
-    public int damageDropped(int meta){
-    	if(meta % 4 == 1){
-    		return meta - 1;
-    	}else{
-    		return meta;
-    	}
-    }
     
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister){
@@ -260,34 +229,5 @@ public class BlockSafeColorStone extends BlockStoneBrick implements IBlockSafeSt
         this.icons[13] = iconRegister.registerIcon("mariri:white_stone");
         this.icons[14] = iconRegister.registerIcon("mariri:white_stonebrick");
         this.icons[15] = iconRegister.registerIcon("mariri:white_smoothstone");
-    }
-    
-    public String getUnlocalizedName(int meta){
-    	return "tile."+ unlocalizedName + "." + meta;
-    }
-    
-	@Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z){
-		if(invertSpawnRule){
-			return super.canCreatureSpawn(type, world, x, y, z);
-		}else{
-			return false;
-		}
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta){
-    	if(meta < icons.length){
-    		return icons[meta];
-    	}else{
-    		return icons[0];
-    	}
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list){
-    	for(int i = 0; i < icons.length; i++){
-    		list.add(new ItemStack(item, 1, i));
-    	}
     }
 }
