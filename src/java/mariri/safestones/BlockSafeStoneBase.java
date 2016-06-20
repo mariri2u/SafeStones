@@ -1,14 +1,20 @@
 package mariri.safestones;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +38,9 @@ public abstract class BlockSafeStoneBase extends BlockStoneBrick implements IBlo
         GameRegistry.registerBlock(this, ItemBlockSafeStone.class, unlocalizedName);
         
     	this.icons = new IIcon[subvalue];
-
+    	
+    	this.setTickRandomly(true);
+    	
         registerRecipe();
         registerOreDictionary();
 	}
@@ -42,13 +50,39 @@ public abstract class BlockSafeStoneBase extends BlockStoneBrick implements IBlo
 	
 	@Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z){
-		if(ModRegistry.INVERT_SPAWN_RULE){
+		if(world.getBlock(x, y - 1, z) == Blocks.mob_spawner){
+			return false;
+		}else if(ModRegistry.INVERT_SPAWN_RULE){
 			return super.canCreatureSpawn(type, world, x, y, z);
 		}else{
 			return false;
 		}
     }
 	
+	@Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack)
+    {
+    	super.onBlockPlacedBy(world, x, y, z, entityLiving, itemstack);
+    	onUpdate(world, x, y, z);
+    }
+    
+	@Override
+    public void updateTick(World world, int x, int y, int z, Random rand) {
+    	super.updateTick(world, x, y, z, rand);
+    	onUpdate(world, x, y, z);
+    }
+    
+    public void onUpdate(World world, int x, int y, int z){
+    	if(world.getBlock(x, y - 1, z) == Blocks.mob_spawner){
+    		TileEntity tileentity = world.getTileEntity(x, y - 1, z);
+    		if(tileentity instanceof TileEntityMobSpawner){
+    			TileEntityMobSpawner spawner = (TileEntityMobSpawner)tileentity;
+    			spawner.func_145881_a().spawnDelay = 800;
+    		}
+    		world.scheduleBlockUpdate(x, y, z, this, 100);
+    	}
+    }
+    
     public String getUnlocalizedName(int meta){
     	return "tile."+ unlocalizedName + "." + meta;
     }
