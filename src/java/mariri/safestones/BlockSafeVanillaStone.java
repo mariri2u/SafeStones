@@ -26,7 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class BlockSafeVanillaStone extends Block implements IBlockSafeStone {
+public class BlockSafeVanillaStone extends BlockSafeStoneBase implements IBlockSafeStone {
 	
 	public static int SUB_BLOCK_VALUES = 15;
 
@@ -36,7 +36,7 @@ public class BlockSafeVanillaStone extends Block implements IBlockSafeStone {
 	protected String name;
 
 	protected BlockSafeVanillaStone(){
-		super(Material.rock);
+		super();
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setStepSound(soundTypePiston);
 		this.setHardness(2.0F);
@@ -105,15 +105,6 @@ public class BlockSafeVanillaStone extends Block implements IBlockSafeStone {
             Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(this), i, new ModelResourceLocation(jsons[i], "inventory"));        	
         }
     }
-    
-	@Override
-    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type){
-		if(ModRegistry.INVERT_SPAWN_RULE){
-			return super.canCreatureSpawn(world, pos, type);
-		}else{
-			return false;
-		}
-	}
 
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list){

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class SafeStones
 {
     public static final String MODID = "SafeStones";
-    public static final String VERSION = "1.8.9-1.1";
+    public static final String VERSION = "1.8.9-1.1a";
 
     public static BlockSafeVanillaStone blockSafeVanillaStone;
     public static BlockSafeColorStone blockSafeColorStone;

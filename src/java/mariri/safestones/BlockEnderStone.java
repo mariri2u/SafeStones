@@ -24,14 +24,14 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
 
-public class BlockEnderStone extends Block implements IBlockSafeStone {
+public class BlockEnderStone extends BlockSafeStoneBase implements IBlockSafeStone {
 	public static int SUB_BLOCK_VALUES = 4;
 	//BlockState用Property変数。今回はmetadataと同じようなPropertyIntegerを用いる。
 	public static PropertyInteger METADATA = PropertyInteger.create("meta", 0, SUB_BLOCK_VALUES - 1);
 	protected String name;
 
 	protected BlockEnderStone(){
-		super(Material.rock);
+		super();
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setStepSound(soundTypePiston);
 		this.setHardness(2.0F);
@@ -122,15 +122,6 @@ public class BlockEnderStone extends Block implements IBlockSafeStone {
         OreDictionary.registerOre("stone", new ItemStack(this, 1, 1));
         OreDictionary.registerOre("stonebrick", new ItemStack(this, 1, 2));
         OreDictionary.registerOre("smoothstone", new ItemStack(this, 1, 15));
-	}
-
-	@Override
-	public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type){
-		if(ModRegistry.INVERT_SPAWN_RULE){
-			return super.canCreatureSpawn(world, pos, type);
-		}else{
-			return false;
-		}
 	}
 
 	@SideOnly(Side.CLIENT)
