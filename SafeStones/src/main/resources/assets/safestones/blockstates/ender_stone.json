@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "meta=0":  { "model": "safestones:ender_cobblestone" },
+        "meta=1":  { "model": "safestones:ender_stone" },
+        "meta=2":  { "model": "safestones:ender_stonebrick" },
+        "meta=3":  { "model": "safestones:ender_smoothstone" }
+    }
+}
